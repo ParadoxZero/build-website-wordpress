@@ -580,7 +580,7 @@ function remove_admin_bar_links() {
         $wp_admin_bar->remove_menu('support-forums');   // Remove the support forums link
         $wp_admin_bar->remove_menu('feedback');         // Remove the feedback link
         //$wp_admin_bar->remove_menu('site-name');        // Remove the site name menu
-
+        $wp_admin_bar->remove_menu('new-content');      // Remove the content link
         $wp_admin_bar->remove_menu('updates');          // Remove the updates link
         $wp_admin_bar->remove_menu('comments');         // Remove the comments link
         $wp_admin_bar->remove_menu('w3tc');             // If you use w3 total cache remove the performance link
@@ -606,6 +606,18 @@ function remove_admin_menu_items() {
 	}
 }
 
+add_filter('gettext', 'change_howdy', 10, 3);
+
+function change_howdy($translated, $text, $domain) {
+
+    if (!is_admin() || 'default' != $domain)
+        return $translated;
+
+    if (false !== strpos($translated, 'Howdy'))
+        return str_replace('Howdy', 'Welcome', $translated);
+
+    return $translated;
+}
 add_action('admin_menu', 'remove_admin_menu_items');
 function remove_the_dashboard () {
 if (current_user_can('level_10')) {
